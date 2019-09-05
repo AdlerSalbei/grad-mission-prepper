@@ -2,20 +2,191 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Homepage</title>
+
+    <title>Mission Parameter</title>
+
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+      body {
+        width: 50%;
+        max-width: 800px;
+        min-width: 480px;
+        margin: 0 auto;
+      }
+      .result {
+        color: black;
+        padding: 3px;
+      }
+      /* Dropdown Button */
+      .dropbtn {
+        background-color: #3498DB;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;s
+      }
+
+      /* Dropdown button on hover & focus */
+      .dropbtn:hover, .dropbtn:focus {
+        background-color: #2980B9;
+      }
+
+      /* The container <div> - needed to position the dropdown content */
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      /* Dropdown Content (Hidden by Default) */
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+      }
+
+      /* Links inside the dropdown */
+      .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+      }
+
+      /* Change color of dropdown links on hover */
+      .dropdown-content a:hover {background-color: #ddd}
+
+      /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+      .show {display:block;}
+    </style>
   </head>
 
   <body>
+      <h1>Mission Parameter</h1>
 
-    <ul>
-      <li>Home</li>
-      <li><a href="pictures.html">Pictures</a></li>
-      <li><a href="projects.html">Projects</a></li>
-      <li><a href="social.html">Social</a></li>
-    </ul>
+      <p>Please enter the basic mission parameters</p>
 
-    <h1>Gruppe Adler Mission Prepper</h1>
+    <div class="form">
+      <label for="missionName">Mission name: </label>
+      <input type="text" id="missionName" class="missionName">
+    </div>
 
-    <p>Welcome to my exciting homepage</p>
+    <div class="form">
+      <label for="worldName">World name: </label>
+      <input type="text" id="worldName" class="worldName">
+    </div>
+
+    <div class="form">
+      <label for="date">Date: </label>
+      <input type="date" id="datefield" name="datefield" value="2018-07-22" min="1900-01-01" max="2199-12-31">
+    </div>
+
+    <div class="form">
+      <label for="time">Please choose a : </label>
+      <input type="time" id="timefield" name="timefield" value="13:37" min="00:00" max="23:59">
+    </div>
+
+    <div class="form">
+      <label for="overcast">Please choose an overcast: </label>
+      <div class="dropdown">
+        <button onclick="myFunction()" class="dropbtn">Dropdown</button>
+        <div id="myDropdown" class="dropdown-content">
+          <a href="#">Link 1</a>
+          <a href="#">Link 2</a>
+          <a href="#">Link 3</a>
+        </div>
+      </div>
+    </div>
+
+    <input type="submit" value="Next" class="nextPage">
+
+    <div class="resultParas">
+      <p class="result"></p>
+    </div>
+
   </body>
+  <script>
+    let missionName = document.querySelector('.missionName');
+    let worldName = document.querySelector('.worldName');
+    let resultPage = document.querySelector('.result');
+    let nextPage = document.querySelector('.nextPage');
+
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth()+1; //January is 0!
+    let yyyy = today.getFullYear();
+
+    if(dd<10){
+      dd='0'+dd
+    } 
+
+    if(mm<10){
+      mm='0'+mm
+    } 
+
+    today = yyyy+'-'+mm+'-'+dd;
+    document.getElementById("datefield").setAttribute("value", today);
+
+    const worldNames = [["altis", "altis"], ["stratis", "stratis"], ["livonia", "enoch"]];
+
+    function escapeRegExp(str) {
+      return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+    }
+    function replaceAll(str, find, replace) {
+      return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+    }
+
+    function fnNextPage() {
+      let missionNameValue = missionName.value;
+      let worldNameValue = worldName.value;
+
+      let missionNamePBO = replaceAll(missionNameValue, ' ', '_'); 
+
+
+      missionNamePBO = missionNamePBO.toLowerCase();
+      worldNameValue = worldNameValue.toLowerCase();
+
+      let result = "";
+      for( let i = 0, len = worldNames.length; i < len; i++ ) {
+          if(worldNames[i][0] === worldNameValue || worldNames[i][1] === worldNameValue) {
+              result = worldNames[i][1];
+              break;
+          }
+      }
+
+      let filename = "PBO Name: " + missionNamePBO + "." + result;
+      
+      if (result === "") {
+        filename = "World not found, PBO name: " + missionNamePBO + "." + worldNameValue;
+        resultPage.style.backgroundColor = 'yellow';
+      }
+
+      resultPage.textContent = filename;
+    }
+
+    nextPage.addEventListener('click', fnNextPage);
+
+    function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    }
+  </script>
 </html>
