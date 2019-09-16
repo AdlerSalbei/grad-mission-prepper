@@ -49,31 +49,33 @@
         cursor: pointer;
       }
     </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuex"></script>
   </head>
 
   <body>
-      <h1>Mission Parameter</h1>
+    <h1>Mission Parameter</h1>
 
-      <p>Please enter the basic mission parameters</p>
-
-    <div class="form">
-      <label for="missionName">Mission name: </label>
-      <input type="text" id="missionName" class="missionName">
+    <p>Please enter the basic mission parameters</p>
+    <div id="missionName">
+      <label for="missionName">Mission Name: </label>
+      <input v-model="message">
     </div>
 
-    <div class="form">
-      <label for="worldName">World name: </label>
-      <input type="text" id="worldName" class="worldName">
+    <div id="worldName">
+      <label for="worldName">World Name: </label>
+      <input v-model="message">
     </div>
 
-    <div class="form">
+    <div id="datefield">
       <label for="date">Date: </label>
-      <input type="date" id="datefield" name="datefield" value="2018-07-22" min="1900-01-01" max="2199-12-31">
+      <input type="date" v-model="mydate">
     </div>
 
-    <div class="form">
-      <label for="time">Please choose a : </label>
-      <input type="time" id="timefield" name="timefield" value="13:37" min="00:00" max="23:59">
+    <div id="timefield">
+      <label for="time">Please choose a time: </label>
+      <input type="time" v-model="mytime">
     </div>
 
     <div class="slidecontainer">
@@ -92,38 +94,42 @@
       </select>
     </div>
 
-    <div class="form">
-      <input type="submit" value="Next" class="nextPage">
-    </div>
-
-    <div class="resultParas">
-      <p class="result"></p>
+    <div id="nextPageID">   
+      <button v-on:click="nextPage">Next</button>
+      <p>{{ message }}</p>
     </div>
 
   </body>
   <script>
-    let missionName = document.querySelector('.missionName');
-    let worldName = document.querySelector('.worldName');
-    let resultPage = document.querySelector('.result');
     let nextPage = document.querySelector('.nextPage');
 
-    let today = new Date();
-    let dd = today.getDate();
-    let mm = today.getMonth()+1; //January is 0!
-    let yyyy = today.getFullYear();
+    let missionName = new Vue({
+      el: '#missionName',
+      data: {
+        message: ''
+      }
+    });
 
-    if(dd<10){
-      dd='0'+dd
-    } 
+    let worldName = new Vue({
+      el: '#worldName',
+      data: {
+        message: 'altis'
+      }
+    });
 
-    if(mm<10){
-      mm='0'+mm
-    } 
+    let date = new Vue({
+      el: '#datefield',
+      data: {
+        mydate: '1993-06-08'
+      }
+    });
 
-    today = yyyy+'-'+mm+'-'+dd;
-    document.getElementById("datefield").setAttribute("value", today);
-
-    const worldNames = [["altis", "altis"], ["stratis", "stratis"], ["livonia", "enoch"]];
+    let time = new Vue({
+      el: '#timefield',
+      data: {
+        mytime: '13:37'
+      }
+    });
 
     function escapeRegExp(str) {
       return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
@@ -132,61 +138,39 @@
       return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
     }
 
-    function fnNextPage() {
-      let missionNameValue = missionName.value;
-      let worldNameValue = worldName.value;
+    var nextPageID = new Vue({
+      el: '#nextPageID',
+      data: {
+        message: ''
+      },
+      methods: {
+        nextPage: function () {
+          const worldNames = [["altis", "altis"], ["stratis", "stratis"], ["livonia", "enoch"]];
+          let missionNameValue = missionName.message;
+          let worldNameValue = worldName.message;
+          let missionNamePBO = replaceAll(missionNameValue, ' ', '_'); 
 
-      let missionNamePBO = replaceAll(missionNameValue, ' ', '_'); 
+          missionNamePBO = missionNamePBO.toLowerCase();
+          worldNameValue = worldNameValue.toLowerCase();
 
-
-      missionNamePBO = missionNamePBO.toLowerCase();
-      worldNameValue = worldNameValue.toLowerCase();
-
-      let result = "";
-      for( let i = 0, len = worldNames.length; i < len; i++ ) {
-          if(worldNames[i][0] === worldNameValue || worldNames[i][1] === worldNameValue) {
-              result = worldNames[i][1];
-              break;
+          let result = "";
+          for( let i = 0, len = worldNames.length; i < len; i++ ) {
+              if(worldNames[i][0] === worldNameValue || worldNames[i][1] === worldNameValue) {
+                  result = worldNames[i][1];
+                  break;
+              }
           }
-      }
 
-      let filename = "PBO Name: " + missionNamePBO + "." + result;
-      
-      if (result === "") {
-        filename = "World not found, PBO name: " + missionNamePBO + "." + worldNameValue;
-        resultPage.style.backgroundColor = 'yellow';
-      }
-
-      resultPage.textContent = filename;
-    }
-
-    nextPage.addEventListener('click', fnNextPage);
-
-    function myFunction() {
-      document.getElementById("myDropdown").classList.toggle("show");
-    }
-
-    var slider = document.getElementById("myRange");
-    var output = document.getElementById("demo");
-    output.innerHTML = slider.value; // Display the default slider value
-
-    // Update the current slider value (each time you drag the slider handle)
-    slider.oninput = function() {
-      output.innerHTML = this.value;
-    } 
-
-    // Close the dropdown menu if the user clicks outside of it
-    window.onclick = function(event) {
-      if (!event.target.matches('.dropbtn')) {
-        var dropdowns = document.getElementsByClassName("dropdown-content");
-        var i;
-        for (i = 0; i < dropdowns.length; i++) {
-          var openDropdown = dropdowns[i];
-          if (openDropdown.classList.contains('show')) {
-            openDropdown.classList.remove('show');
+          let filename = "PBO Name: " + missionNamePBO + "." + result;
+          
+          if (result === "") {
+            filename = "World not found, PBO name: " + missionNamePBO + "." + worldNameValue;
           }
+
+          localStorage.setItem("basicMissionParameters", filename);
+          window.location.href="loadout.html";
         }
       }
-    }
+    })
   </script>
 </html>

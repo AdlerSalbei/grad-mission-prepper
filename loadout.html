@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>Modules</title>
+
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+      body {
+        width: 50%;
+        max-width: 800px;
+        min-width: 480px;
+        margin: 0 auto;
+      }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuex"></script>
+  </head>
+
+  <body>
+      <h1>Mission Parameter</h1>
+
+      <p>Please enter the basic mission parameters</p>
+
+      <div id="nextPageID">   
+        <button v-on:click="nextPage">Next</button>
+        <p>{{ message }}</p>
+      </div>
+  </body>
+  <script>
+    var nextPageID = new Vue({
+      el: '#nextPageID',
+      data: {
+        message: 'Nope'
+      },
+      methods: {
+        nextPage: function () {
+          let name = localStorage.getItem("basicMissionParameters");
+          this.message = "Name" + name;
+        }
+      }
+    })
+  </script>
+</html>
