@@ -63,24 +63,34 @@
       <input v-model="message">
     </div>
 
+    <br>
+
     <div id="worldName">
       <label for="worldName">World Name: </label>
       <input v-model="message">
     </div>
+
+    <br>
 
     <div id="datefield">
       <label for="date">Date: </label>
       <input type="date" v-model="mydate">
     </div>
 
+    <br>
+
     <div id="timefield">
       <label for="time">Please choose a time: </label>
       <input type="time" v-model="mytime">
     </div>
 
+    <br>
+
     <div class="slidecontainer">
       <input type="range" min="0" max="100" value="50" class="slider" id="myRange">
     </div>
+
+    <br>
 
     <div id="selection">
       <select v-model="selected">
@@ -90,6 +100,8 @@
         <option>C</option>
       </select>
     </div>
+
+    <br>
 
     <div id="nextPageID">   
       <button v-on:click="nextPage">Next</button>
@@ -152,6 +164,9 @@
           const worldNames = [["altis", "altis"], ["stratis", "stratis"], ["livonia", "enoch"]];
           let missionNameValue = missionName.message;
           let worldNameValue = worldName.message;
+          let missionDate = date.mydate;
+          let missionTime = time.mytime;
+
           let missionNamePBO = replaceAll(missionNameValue, ' ', '_'); 
 
           missionNamePBO = missionNamePBO.toLowerCase();
@@ -171,8 +186,8 @@
             filename = "World not found, PBO name: " + missionNamePBO + "." + worldNameValue;
           }
 
-          localStorage.setItem("basicMissionParameters", filename);
-          window.location.href="modules.html";
+          localStorage.setItem("basicMissionParameters", [filename, missionDate, missionTime]);
+          window.location.href="medical-system.html";
         }
       }
     })

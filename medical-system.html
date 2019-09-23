@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>Modules</title>
+
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+      body {
+        width: 50%;
+        max-width: 800px;
+        min-width: 480px;
+        margin: 0 auto;
+      }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuex"></script>
+  </head>
+
+  <body>
+    <h1>Medicla Settings</h1>
+
+    <div id="chooseMedicalSystem">
+        <p>Availible Presets:</p>
+        <button @click="selected = 'basic'"> Basic </button>
+        <button @click="selected = 'advanced'"> Advanced </button>
+    </div>
+
+    <br>
+
+    <div id="selection">
+        <label>AI Unconsiousness: </label>
+        <select v-model="selected">
+            <option>0</option>
+            <option>50/50</option>
+            <option>100</option>
+        </select>
+    </div>
+
+    <br>
+
+    <div id="nextPageID">   
+        <button v-on:click="nextPage">Next</button>
+        <p>{{ message }}</p>
+    </div>
+  </body>
+  <script>
+    var aiUnconsiousness = new Vue({
+        el: '#selection',
+        data: {
+            selected: "0"
+        }
+    })
+    
+    var medicalSetting = new Vue({
+        el: '#chooseMedicalSystem',
+        data: {
+            selected: null,
+        },
+        methods: {
+            medicalSetup: function () {
+                let medicalSetting = medicalSetting.selected;
+                if (medicalSetting === basic) {
+                    aiUnconsiousness.selected = "0"
+                } else {
+
+                }
+            }
+        }
+    });
+ 
+    var nextPageID = new Vue({
+        el: '#nextPageID',
+        data: {
+            message: ''
+        },
+        methods: {
+            nextPage: function () {
+                let name = localStorage.getItem("basicMissionParameters");
+                this.message = "Name: " + name;
+            }
+        }
+    })
+  </script>
+</html>
