@@ -22,12 +22,12 @@
   </head>
 
   <body>
-    <h1>Medicla Settings</h1>
+    <h1>Medical Settings</h1>
 
     <div id="chooseMedicalSystem">
         <p>Availible Presets:</p>
-        <button @click="selected = 'basic'"> Basic </button>
-        <button @click="selected = 'advanced'"> Advanced </button>
+        <button v-on:click = "medicalSetup('basic')"> Basic </button>
+        <button v-on:click = "medicalSetup('advanced')"> Advanced </button>
     </div>
 
     <br>
@@ -44,8 +44,7 @@
     <br>
 
     <div id="nextPageID">   
-        <button v-on:click="nextPage">Next</button>
-        <p>{{ message }}</p>
+        <button v-on:click = "nextPage">Next</button>
     </div>
   </body>
   <script>
@@ -62,12 +61,11 @@
             selected: null,
         },
         methods: {
-            medicalSetup: function () {
-                let medicalSetting = medicalSetting.selected;
-                if (medicalSetting === basic) {
+            medicalSetup: function (type) {
+                if (type === "basic") {
                     aiUnconsiousness.selected = "0"
-                } else {
-
+                } else if (type === "advanced") {
+                    aiUnconsiousness.selected = "0"
                 }
             }
         }
@@ -75,13 +73,10 @@
  
     var nextPageID = new Vue({
         el: '#nextPageID',
-        data: {
-            message: ''
-        },
         methods: {
             nextPage: function () {
-                let name = localStorage.getItem("basicMissionParameters");
-                this.message = "Name: " + name;
+                sessionStorage.setItem("missionMedicalSettings", [aiUnconsiousness.selected]);
+                window.location.href = "modules.html";      
             }
         }
     })

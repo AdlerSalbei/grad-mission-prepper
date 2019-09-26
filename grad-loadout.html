@@ -28,19 +28,22 @@
 
       <div id="nextPageID">   
         <button v-on:click="nextPage">Next</button>
-        <p>{{ message }}</p>
       </div>
   </body>
   <script>
     var nextPageID = new Vue({
       el: '#nextPageID',
-      data: {
-        message: 'Nope'
-      },
       methods: {
         nextPage: function () {
-          let name = localStorage.getItem("basicMissionParameters");
-          this.message = "Name" + name;
+          let choosenModules = sessionStorage.getItem("missionModulesToDo");
+          choosenModules = choosenModules.split(",");
+          
+          let nextPageName = choosenModules[0];
+
+          choosenModules.shift();
+          sessionStorage.setItem("missionModulesToDo", choosenModules);
+
+          window.location.href = nextPageName; 
         }
       }
     })

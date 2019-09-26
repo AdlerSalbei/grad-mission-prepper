@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html>
+<html lang=de-DE prefix="og: http://ogp.me/ns#">
   <head>
-    <meta charset="utf-8">
+    <meta charset=UTF-8>
 
     <title>Modules</title>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.3/css/bulma.css">
     <style>
       html {
         font-family: sans-serif;
@@ -14,6 +13,27 @@
         max-width: 800px;
         min-width: 480px;
         margin: 0 auto;
+      }
+
+      .message {
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .message-header {new Vue
+        cursor: pointer;
+      }
+      .message-body   {
+        padding: 0;
+        max-height: 10em;
+        overflow: hidden;
+        transition: 0.3s ease all;
+      }
+      .is-closed .message-body {
+        max-height: 0;
+      }
+      .message-content {
+        padding: 20px;
       }
     </style>
 
@@ -25,17 +45,87 @@
     <h1>Mission Parameter</h1>
 
     <p>Please enter the basic mission parameters</p>
-    <div id="vm">
-        <input
-          type="checkbox"
-          v-model="toggle"
-          true-value="yes"
-          false-value="no"
-        >
-      <br>
-      <span>Selected: {{  }}
+    
+    <section id="app" class="section container">
+        <article class="message" :class="accordionClasses">
+          <div class="message-header" @click="toggleAccordion">
+              <input type="checkbox"  v-model="gradLoadoutChecked">
+              <label>Grad-Loadout</label>       
+          </div>
+          <div class="message-body">
+            <div class="message-content">
+              avd
+            </div>
+          </div>
+        </article>
+        <article class="message" :class="accordionClasses">
+            <div class="message-header" @click="toggleAccordion">
+                <input type="checkbox"  v-model="gradFactionChecked">
+                <label>Grad-Loadout</label> 
+            </div>
+            <div class="message-body">
+              <div class="message-content">
+                asd
+              </div>
+            </div>
+        </article>
+    </section>
+    
+    <div id="nextPageID">   
+        <button v-on:click = "nextPage">Next</button>
     </div>
-  </body>
-  <script>
+   
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data: {
+                isOpen: false,
+                gradLoadoutChecked: false,
+                gradFactionChecked: false
+            },
+            methods: {
+                toggleAccordion: function() {
+                this.isOpen = !this.isOpen;
+              }
+            },
+            computed: {
+              accordionClasses: function() {
+                return {
+                  'is-closed': !this.isOpen,
+                  'is-primary': this.isOpen,
+                  'is-dark': !this.isOpen
+                };
+              }
+            }
+      });
+
+
+    var nextPageID = new Vue({
+        el: '#nextPageID',
+        methods: {
+            nextPage: function () {
+              choosenModules = [];
+
+              if (app.gradLoadoutChecked) {
+                  choosenModules.push("grad-loadout.html");
+              }
+
+              if (app.gradFactionChecked) {
+                  choosenModules.push("grad-factions.html");
+              }
+              
+              nextPageName = choosenModules[0];
+
+              if (nextPageName === undefined) {
+                  nextPageName = "map.html";
+              } else {
+                  choosenModules.push("map.html");
+                  choosenModules.shift();
+                  sessionStorage.setItem("missionModulesToDo", choosenModules);
+              }
+              window.location.href = nextPageName;  
+            }
+        }
+    })
   </script>
 </html>

@@ -23,7 +23,26 @@
 
   <body>
     <h1>GRAD Faction</h1>
+    <div id="nextPageID">   
+        <button v-on:click="nextPage">Next</button>
+      </div>
   </body>
   <script>
+    var nextPageID = new Vue({
+      el: '#nextPageID',
+      methods: {
+        nextPage: function () {
+          let choosenModules = sessionStorage.getItem("missionModulesToDo");
+          choosenModules = choosenModules.split(",");
+          
+          let nextPageName = choosenModules[0];
+
+          choosenModules.shift();
+          sessionStorage.setItem("missionModulesToDo", choosenModules);
+
+          window.location.href = nextPageName; 
+        }
+      }
+    })
   </script>
 </html>

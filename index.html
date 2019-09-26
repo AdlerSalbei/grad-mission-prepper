@@ -92,20 +92,8 @@
 
     <br>
 
-    <div id="selection">
-      <select v-model="selected">
-        <option disabled value="">Please select one</option>
-        <option>A</option>
-        <option>B</option>
-        <option>C</option>
-      </select>
-    </div>
-
-    <br>
-
     <div id="nextPageID">   
       <button v-on:click="nextPage">Next</button>
-      <p>{{ message }}</p>
     </div>
 
   </body>
@@ -140,13 +128,6 @@
       }
     });
 
-    let selection = new Vue({
-      el: '#selection',
-      data: {
-        selected: ''
-      }
-    })
-
     function escapeRegExp(str) {
       return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
     }
@@ -156,9 +137,6 @@
 
     var nextPageID = new Vue({
       el: '#nextPageID',
-      data: {
-        message: ''
-      },
       methods: {
         nextPage: function () {
           const worldNames = [["altis", "altis"], ["stratis", "stratis"], ["livonia", "enoch"]];
@@ -186,8 +164,8 @@
             filename = "World not found, PBO name: " + missionNamePBO + "." + worldNameValue;
           }
 
-          localStorage.setItem("basicMissionParameters", [filename, missionDate, missionTime]);
-          window.location.href="medical-system.html";
+          sessionStorage.setItem("basicMissionParameters", [filename, missionDate, missionTime]);
+          window.location.href = "medical-system.html";
         }
       }
     })
